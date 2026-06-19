@@ -216,3 +216,62 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+
+# Raw archives and datasets
+
+archive.zip
+*.zip
+dataset/
+USA_segmentation/
+data/USA_segmentation/
+
+# Local experiment workspace
+
+standing_dead_tree_segmentation_workspace/
+
+# Generated arrays and intermediate files
+
+combined_inputs/
+*.npy
+*.npz
+
+# Model checkpoints and trained weights
+
+checkpoints/
+*.pt
+*.pth
+*.pkl
+*.ckpt
+
+# Generated output folders
+
+outputs/
+
+# Python cache
+
+**pycache**/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter / notebook cache
+
+.ipynb_checkpoints/
+
+# Virtual environments
+
+.venv/
+venv/
+env/
+
+# System files
+
+.DS_Store
+Thumbs.db
+
+# IDE files
+
+.vscode/
+.idea/
