@@ -114,19 +114,53 @@ The original ADA-Net paper is cited as related work because it introduced an att
 
 The experiment outputs are summarised through selected visualisations and CSV logs. Full generated outputs, model checkpoints, intermediate arrays, raw images, and prediction masks are not included in the repository.
 
-### Model Metric Comparison
+### Overall Model Comparison
 
 ![Final metric comparison](assets/comparison/final_logged_metric_comparison_all_models.png)
 
-### Training Curves
+The comparison chart summarises the main evaluation metrics across the implemented models. It provides a compact overview of the trade-offs between accuracy, Dice score, IoU, precision, and recall.
+
+## Training Curves
+
+### Accuracy Comparison
+
+![Accuracy comparison](assets/training_curves/accuracy_comparison_across_models.png)
+
+### Dice Score Comparison
 
 ![Dice comparison](assets/training_curves/dice_comparison_across_models.png)
 
+### IoU Comparison
+
 ![IoU comparison](assets/training_curves/iou_comparison_across_models.png)
+
+### Training Loss Comparison
 
 ![Training loss comparison](assets/training_curves/train_loss_comparison_across_models.png)
 
+### Validation Loss Comparison
+
 ![Validation loss comparison](assets/training_curves/val_loss_comparison_across_models.png)
+
+## Confusion Matrices
+
+The following confusion matrices provide a pixel-level view of model behaviour, including true background, predicted background, true tree pixels, and predicted tree pixels.
+
+### UNet
+
+![UNet confusion matrix](assets/confusion_matrices/unet_confusion_matrix.png)
+
+### DeepLabV3
+
+![DeepLabV3 confusion matrix](assets/confusion_matrices/deeplabv3_confusion_matrix.png)
+
+### Fast-SCNN-style Model
+
+![FastSCNN confusion matrix](assets/confusion_matrices/fastscnn_confusion_matrix.png)
+
+### ADA-Net-inspired Model
+
+![ADA-Net confusion matrix](assets/confusion_matrices/adanet_confusion_matrix.png)
 
 ## Reproducibility
 
