@@ -1,38 +1,99 @@
 # Standing Dead Tree Segmentation from Aerial Imagery
 
-This project explores semantic segmentation methods for detecting standing dead trees in aerial forest imagery. It compares a classical machine learning baseline with several deep learning models using RGB and near-infrared image information.
+This repository presents a computer vision workflow for segmenting standing dead trees from aerial imagery. It compares classical machine-learning and deep-learning segmentation approaches on multispectral forest imagery and reports model performance using segmentation metrics, training logs, confusion matrices, and visual examples.
 
-The project focuses on reproducible experimentation, model comparison, and visual analysis for remote sensing-based forest health monitoring.
+The project focuses on identifying small standing dead-tree regions in aerial scenes, where the foreground class is sparse and visually difficult to separate from surrounding vegetation.
+
+![Model comparison](assets/comparison/final_logged_metric_comparison_all_models.png)
 
 ## Project Overview
 
-Standing dead trees are important indicators of forest condition and can contribute to ecological risks such as wildfire spread. Aerial and multispectral imagery provide a scalable way to monitor forest areas without requiring manual field inspection at every location.
+Standing dead tree segmentation is a challenging remote-sensing task because the target regions are small, sparse, and often visually similar to healthy canopy or background vegetation.
 
-This project compares several segmentation approaches:
+This workflow compares several modelling approaches:
 
-* Linear SVM baseline with pixel-level RGB and near-infrared features
-* UNet segmentation model
-* DeepLabV3-based segmentation model
-* Fast-SCNN-style lightweight segmentation model
-* ADA-Net-inspired lightweight segmentation model
+* **SVM Linear SVC**: a classical machine-learning baseline.
+* **U-Net**: an encoder-decoder semantic segmentation model.
+* **Fast-SCNN**: a lightweight segmentation network.
+* **DeepLabV3**: an atrous-convolution-based segmentation model.
+* **AdaNet-style model**: an attention-oriented neural segmentation variant included in the experiment runs.
 
-The models are evaluated using common segmentation metrics, including Dice score, IoU, accuracy, precision, and recall.
+The repository includes selected result visualisations, metric summaries, training logs, and reproducible split files. Raw image data, masks, model checkpoints, and large intermediate outputs are intentionally excluded.
+
+## Key Features
+
+* Multispectral aerial-image segmentation workflow.
+* RGB and NRG/NIR-based input handling.
+* Classical SVM baseline and deep segmentation models.
+* Reproducible train/validation split files.
+* Evaluation with IoU, Dice, accuracy, and confusion matrices.
+* Training-curve comparisons across models.
+* Selected qualitative examples and worst-case visualisations.
+* Colab-first notebook workflow with lightweight repository outputs.
+
+## Dataset
+
+The raw dataset is not included in this repository.
+
+This project uses the public Kaggle dataset associated with the ADA-Net paper:
+
+**Aerial Imagery for Standing Dead Tree Segmentation**
+Author: Mete Ahishali
+Source: Kaggle
+Associated paper: *ADA-Net: Attention-Guided Domain Adaptation Network with Contrastive Learning for Standing Dead Tree Segmentation Using Aerial Imagery*
+
+Dataset page:
+
+```text
+https://www.kaggle.com/datasets/meteahishali/aerial-imagery-for-standing-dead-tree-segmentation
+```
+
+The expected local dataset structure is:
+
+```text
+data/
+└── USA_segmentation/
+    ├── RGB_images/
+    ├── NRG_images/
+    └── masks/
+```
+
+Each sample should have corresponding RGB, NRG, and mask files.
+
+More detailed dataset setup notes are provided in:
+
+```text
+data/README.md
+```
 
 ## Repository Structure
 
 ```text
-.
-├── Standing_Dead_Tree_Segmentation_from_Aerial_Imagery.ipynb
-├── README.md
-├── requirements.txt
-├── .gitignore
+standing-dead-tree-segmentation/
+├── assets/
+│   ├── comparison/
+│   │   └── final_logged_metric_comparison_all_models.png
+│   ├── confusion_matrices/
+│   │   ├── adanet_confusion_matrix.png
+│   │   ├── deeplabv3_confusion_matrix.png
+│   │   ├── fastscnn_confusion_matrix.png
+│   │   ├── svm_linear_svc_confusion_matrix.png
+│   │   └── unet_confusion_matrix.png
+│   ├── examples/
+│   │   ├── adanet_worst_example.png
+│   │   ├── deeplabv3_worst_example.png
+│   │   ├── fastscnn_worst_example.png
+│   │   ├── svm_linear_svc_visualization_example.png
+│   │   ├── svm_linear_svc_worst_example.png
+│   │   └── unet_worst_example.png
+│   └── training_curves/
+│       ├── accuracy_comparison_across_models.png
+│       ├── dice_comparison_across_models.png
+│       ├── iou_comparison_across_models.png
+│       ├── train_loss_comparison_across_models.png
+│       └── val_loss_comparison_across_models.png
 ├── data/
 │   └── README.md
-├── splits/
-│   ├── train.csv
-│   ├── train.txt
-│   ├── val.csv
-│   └── val.txt
 ├── results/
 │   ├── metrics/
 │   │   ├── eval_results_adanet.csv
@@ -43,99 +104,80 @@ The models are evaluated using common segmentation metrics, including Dice score
 │       ├── training_log_adanet.csv
 │       ├── training_log_deeplabv3.csv
 │       ├── training_log_fastscnn.csv
-│       ├── training_log_unet.csv
-│       └── training_log_svm.csv
-└── assets/
-    ├── comparison/
-    │   └── final_logged_metric_comparison_all_models.png
-    ├── training_curves/
-    │   ├── accuracy_comparison_across_models.png
-    │   ├── dice_comparison_across_models.png
-    │   ├── iou_comparison_across_models.png
-    │   ├── train_loss_comparison_across_models.png
-    │   └── val_loss_comparison_across_models.png
-    ├── confusion_matrices/
-    │   ├── adanet_confusion_matrix.png
-    │   ├── deeplabv3_confusion_matrix.png
-    │   ├── fastscnn_confusion_matrix.png
-    │   └── unet_confusion_matrix.png
-    └── examples/
-        ├── adanet_worst_example.png
-        ├── deeplabv3_worst_example.png
-        ├── fastscnn_worst_example.png
-        ├── svm_linear_svc_visualization_example.png
-        ├── svm_linear_svc_worst_example.png
-        └── unet_worst_example.png
+│       ├── training_log_svm.csv
+│       └── training_log_unet.csv
+├── splits/
+│   ├── train.csv
+│   ├── train.txt
+│   ├── val.csv
+│   └── val.txt
+├── .gitignore
+├── README.md
+├── Standing_Dead_Tree_Segmentation_from_Aerial_Imagery.ipynb
+└── requirements.txt
 ```
-
-## Dataset
-
-The raw dataset is not included in this repository.
-
-This project uses the public Kaggle dataset associated with the ADA-Net paper:
-
-**Aerial Imagery for Dead Tree Segmentation**
-Author: Mete Ahishali
-Source: Kaggle
-Associated paper: *ADA-Net: Attention-Guided Domain Adaptation Network with Contrastive Learning for Standing Dead Tree Segmentation Using Aerial Imagery*
-
-The dataset contains aerial forest imagery with RGB images, near-infrared false-colour imagery, and manually annotated segmentation masks. The original dataset should be downloaded directly from Kaggle rather than redistributed through this repository.
-
-After downloading and extracting the dataset, arrange the local files as:
-
-```text
-data/
-└── USA_segmentation/
-    ├── RGB_images/
-    ├── NRG_images/
-    └── masks/
-```
-
-The raw image files, masks, archives, model checkpoints, and generated intermediate arrays are intentionally excluded from version control.
-
-For more details about the expected local data layout, see `data/README.md`.
 
 ## Methods
 
-### Linear SVM Baseline
+### SVM Linear SVC Baseline
 
-The Linear SVM model is used as a classical machine learning baseline. It operates on pixel-level RGB and near-infrared features and provides a non-neural comparison point for the segmentation task.
+The SVM baseline provides a classical machine-learning comparison point. It uses hand-crafted pixel-level features derived from the available image channels and trains a linear classifier to distinguish dead-tree pixels from background pixels.
 
-### UNet
+This baseline is useful for understanding how far a simple model can go before using neural segmentation architectures.
 
-UNet is implemented as an encoder-decoder convolutional segmentation model with skip connections. It is used as a strong deep learning baseline for dense binary segmentation.
+### U-Net
+
+U-Net is used as a compact encoder-decoder segmentation model. Its skip connections help preserve spatial detail between the encoder and decoder, which is important for small-object segmentation.
+
+### Fast-SCNN
+
+Fast-SCNN is included as a lightweight semantic segmentation model. It provides a comparison point for speed-oriented segmentation architectures.
 
 ### DeepLabV3
 
-DeepLabV3 is included as a semantic segmentation model with multi-scale contextual feature extraction. It provides a comparison against a deeper architecture commonly used for segmentation tasks.
+DeepLabV3 uses atrous convolution to capture broader context while maintaining spatial resolution. This is useful for dense prediction tasks where both local texture and wider scene context matter.
 
-### Fast-SCNN-style Model
+### AdaNet-style Model
 
-A lightweight Fast-SCNN-style model is implemented to evaluate the trade-off between segmentation quality and computational efficiency.
+The AdaNet-style model is included as an additional neural segmentation approach for comparison with the other deep-learning models.
 
-### ADA-Net-inspired Model
+## Evaluation Metrics
 
-The project also includes an ADA-Net-inspired lightweight model. This model is not a full reproduction of the original ADA-Net domain adaptation framework. Instead, it is included as an attention-inspired segmentation variant for comparison with the other implemented models.
+The workflow evaluates segmentation performance using standard pixel-level metrics.
 
-The original ADA-Net paper is cited as related work because it introduced an attention-guided domain adaptation framework for standing dead tree segmentation using aerial imagery.
+| Metric    | Meaning                                                  |
+| --------- | -------------------------------------------------------- |
+| Accuracy  | Overall proportion of correctly classified pixels        |
+| Dice      | Overlap-focused segmentation score                       |
+| IoU       | Intersection-over-union between predicted and true masks |
+| Precision | Fraction of predicted foreground pixels that are correct |
+| Recall    | Fraction of true foreground pixels detected by the model |
+
+Because standing dead tree pixels are sparse, overlap-focused metrics such as Dice and IoU are especially important for model comparison.
 
 ## Results
 
-The experiment outputs are summarised through selected visualisations and CSV logs. Full generated outputs, model checkpoints, intermediate arrays, raw images, and prediction masks are not included in the repository.
-
 ### Overall Model Comparison
 
-![Final metric comparison](assets/comparison/final_logged_metric_comparison_all_models.png)
+The combined comparison figure summarises logged performance metrics across the evaluated models.
 
-The comparison chart summarises the main evaluation metrics across the implemented models. It provides a compact overview of the trade-offs between accuracy, Dice score, IoU, precision, and recall.
+![Final logged metric comparison](assets/comparison/final_logged_metric_comparison_all_models.png)
+
+Detailed metric files are stored under:
+
+```text
+results/metrics/
+```
 
 ## Training Curves
+
+Training-curve summaries are included for model comparison.
 
 ### Accuracy Comparison
 
 ![Accuracy comparison](assets/training_curves/accuracy_comparison_across_models.png)
 
-### Dice Score Comparison
+### Dice Comparison
 
 ![Dice comparison](assets/training_curves/dice_comparison_across_models.png)
 
@@ -151,139 +193,244 @@ The comparison chart summarises the main evaluation metrics across the implement
 
 ![Validation loss comparison](assets/training_curves/val_loss_comparison_across_models.png)
 
-## Qualitative Examples
-
-The following examples show representative prediction behaviour and failure cases. They are included to support visual inspection beyond aggregate metric values.
-
-### Linear SVM Example
-
-![Linear SVM visualisation example](assets/examples/svm_linear_svc_visualization_example.png)
-
-### Worst-case Examples
-
-| Model            | Example                                                                 |
-| ---------------- | ----------------------------------------------------------------------- |
-| Linear SVM       | ![SVM worst example](assets/examples/svm_linear_svc_worst_example.png)  |
-| UNet             | ![UNet worst example](assets/examples/unet_worst_example.png)           |
-| DeepLabV3        | ![DeepLabV3 worst example](assets/examples/deeplabv3_worst_example.png) |
-| Fast-SCNN-style  | ![Fast-SCNN worst example](assets/examples/fastscnn_worst_example.png)  |
-| ADA-Net-inspired | ![ADA-Net worst example](assets/examples/adanet_worst_example.png)      |
-
 ## Confusion Matrices
 
-The following confusion matrices provide a pixel-level view of model behaviour, including true background pixels, predicted background pixels, true tree pixels, and predicted tree pixels.
+Confusion matrices are included for each evaluated model.
 
-### UNet
+| Model              | Confusion Matrix                                                |
+| ------------------ | --------------------------------------------------------------- |
+| SVM Linear SVC     | `assets/confusion_matrices/svm_linear_svc_confusion_matrix.png` |
+| U-Net              | `assets/confusion_matrices/unet_confusion_matrix.png`           |
+| Fast-SCNN          | `assets/confusion_matrices/fastscnn_confusion_matrix.png`       |
+| DeepLabV3          | `assets/confusion_matrices/deeplabv3_confusion_matrix.png`      |
+| AdaNet-style model | `assets/confusion_matrices/adanet_confusion_matrix.png`         |
 
-![UNet confusion matrix](assets/confusion_matrices/unet_confusion_matrix.png)
+### U-Net Confusion Matrix
 
-### DeepLabV3
+![U-Net confusion matrix](assets/confusion_matrices/unet_confusion_matrix.png)
+
+### DeepLabV3 Confusion Matrix
 
 ![DeepLabV3 confusion matrix](assets/confusion_matrices/deeplabv3_confusion_matrix.png)
 
-### Fast-SCNN-style Model
+### Fast-SCNN Confusion Matrix
 
-![FastSCNN confusion matrix](assets/confusion_matrices/fastscnn_confusion_matrix.png)
+![Fast-SCNN confusion matrix](assets/confusion_matrices/fastscnn_confusion_matrix.png)
 
-### ADA-Net-inspired Model
+### SVM Linear SVC Confusion Matrix
 
-![ADA-Net confusion matrix](assets/confusion_matrices/adanet_confusion_matrix.png)
+![SVM Linear SVC confusion matrix](assets/confusion_matrices/svm_linear_svc_confusion_matrix.png)
 
-## Reproducibility
+### AdaNet-style Confusion Matrix
 
-The repository includes fixed train and validation split files under `splits/` so that experiments can be repeated using the same data partition.
+![AdaNet confusion matrix](assets/confusion_matrices/adanet_confusion_matrix.png)
 
-The CSV files under `results/` store evaluation summaries and training histories for the compared models.
+## Example Visualisations
 
-This repository is organised as a Colab-first workflow. The notebook can be run in a Colab-style environment after the dataset is placed in the expected directory structure.
+Selected qualitative outputs are included under:
 
-For local execution, some path definitions may need to be adjusted because the original workflow was developed around a Colab-style workspace.
+```text
+assets/examples/
+```
 
-## Installation
+These files are derived visualisations for model inspection. They are not intended to redistribute the raw dataset.
 
-Install the required Python packages with:
+### SVM Linear SVC Example
+
+![SVM Linear SVC visualisation](assets/examples/svm_linear_svc_visualization_example.png)
+
+### Worst-case Examples
+
+| Model              | Example File                                       |
+| ------------------ | -------------------------------------------------- |
+| SVM Linear SVC     | `assets/examples/svm_linear_svc_worst_example.png` |
+| U-Net              | `assets/examples/unet_worst_example.png`           |
+| Fast-SCNN          | `assets/examples/fastscnn_worst_example.png`       |
+| DeepLabV3          | `assets/examples/deeplabv3_worst_example.png`      |
+| AdaNet-style model | `assets/examples/adanet_worst_example.png`         |
+
+## Included Outputs
+
+The repository includes lightweight outputs for inspection and reproducibility.
+
+### Assets
+
+| Folder                       | Description                                                 |
+| ---------------------------- | ----------------------------------------------------------- |
+| `assets/comparison/`         | Final model comparison visualisation                        |
+| `assets/confusion_matrices/` | Confusion matrices for evaluated models                     |
+| `assets/examples/`           | Selected qualitative examples and worst-case visualisations |
+| `assets/training_curves/`    | Training, validation, and metric comparison plots           |
+
+### Results
+
+| Folder                   | Description                 |
+| ------------------------ | --------------------------- |
+| `results/metrics/`       | Evaluation metric CSV files |
+| `results/training_logs/` | Training-log CSV files      |
+
+### Splits
+
+| File               | Description                   |
+| ------------------ | ----------------------------- |
+| `splits/train.csv` | Reproducible training split   |
+| `splits/train.txt` | Training split file list      |
+| `splits/val.csv`   | Reproducible validation split |
+| `splits/val.txt`   | Validation split file list    |
+
+The split files are lightweight metadata files. They do not contain the raw images or segmentation masks.
+
+## Files Not Included
+
+The following files and folders are intentionally excluded from this repository:
+
+```text
+archive.zip
+*.zip
+USA_segmentation/
+data/USA_segmentation/
+dataset/
+datasets/
+raw/
+combined_inputs/
+*.npy
+*.npz
+checkpoints/
+models/
+weights/
+*.pt
+*.pth
+*.pkl
+*.ckpt
+outputs/
+predictions/
+full_prediction_masks/
+```
+
+Raw images, raw masks, trained model checkpoints, intermediate arrays, full prediction masks, large local outputs, and dataset archives are not redistributed.
+
+## Setup
+
+Install dependencies with:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Main dependencies include:
+Main dependencies:
 
-* NumPy
-* pandas
-* Matplotlib
-* OpenCV
-* scikit-learn
-* PyTorch
-* torchvision
-* Pillow
-* tqdm
-* Jupyter
+```text
+numpy
+pandas
+matplotlib
+opencv-python
+scikit-learn
+torch
+torchvision
+Pillow
+tqdm
+ipython
+jupyter
+```
 
 ## How to Run
 
-### Colab-first workflow
+This project was developed as a notebook workflow.
 
-1. Download the dataset from Kaggle.
-2. Upload or mount the dataset in the expected directory structure.
-3. Install dependencies using `requirements.txt`.
-4. Open the notebook:
+Open:
 
 ```text
 Standing_Dead_Tree_Segmentation_from_Aerial_Imagery.ipynb
 ```
 
-5. Run the notebook sections in order.
+Then run the notebook cells after preparing the dataset locally.
 
-The notebook covers environment setup, data preparation, model training, evaluation, and result visualisation.
+### 1. Download the Dataset
 
-### Local execution
+Download the dataset from Kaggle:
 
-The notebook can also be adapted for local execution. To run it locally:
-
-1. Clone this repository.
-2. Install the required dependencies.
-3. Download the dataset from the original Kaggle source.
-4. Place the dataset under the expected `data/USA_segmentation/` structure.
-5. Adjust any Colab-specific path definitions if needed.
-6. Run the notebook in Jupyter.
-
-```bash
-jupyter notebook Standing_Dead_Tree_Segmentation_from_Aerial_Imagery.ipynb
+```text
+https://www.kaggle.com/datasets/meteahishali/aerial-imagery-for-standing-dead-tree-segmentation
 ```
 
-## Notes
+### 2. Extract the Dataset
 
-Large generated files are intentionally excluded from this repository, including:
+Arrange the extracted files as:
 
-* Raw dataset files
-* Dataset archives
-* Model checkpoints
-* Intermediate `.npy` arrays
-* Full prediction masks
-* Local experiment workspaces
-* Private documents or non-public source materials
+```text
+data/
+└── USA_segmentation/
+    ├── RGB_images/
+    ├── NRG_images/
+    └── masks/
+```
 
-This keeps the repository focused on source code, reproducibility files, selected results, and documentation.
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Run the Notebook
+
+Run the notebook from top to bottom.
+
+The notebook will load the dataset, prepare inputs, train or evaluate segmentation models, generate metric summaries, and save selected visualisations.
+
+## Colab and Local Execution Notes
+
+The notebook is Colab-first. If running locally, update any fixed Google Drive or Colab paths so that they point to the cloned repository directory.
+
+A local-friendly setup pattern is:
+
+```python
+from pathlib import Path
+
+PROJECT_ROOT = Path.cwd().resolve()
+```
+
+This allows local paths such as `data/`, `splits/`, `results/`, and `assets/` to resolve relative to the repository root.
+
+## Reproducibility Notes
+
+The repository includes split files under `splits/` so that the same train/validation partition can be reused.
+
+A full rerun requires the raw dataset to be downloaded from Kaggle and placed in the expected local structure.
+
+Results may vary depending on random seeds, hardware, package versions, image preprocessing choices, and model-training settings.
 
 ## Limitations
 
-* The notebook is currently organised around a Colab-first workflow.
-* Local execution may require path adjustments.
-* Raw data and trained model checkpoints are not included.
-* The included visualisations and CSV files summarise selected experiment outputs rather than all generated intermediate files.
-* The ADA-Net-inspired model is a lightweight segmentation variant, not a full reproduction of the original ADA-Net domain adaptation framework.
+* The repository does not include raw images or masks.
+* The repository does not include trained model checkpoints.
+* The project uses selected derived visualisations rather than full prediction-mask exports.
+* The foreground class is sparse, so high pixel accuracy alone can be misleading.
+* Model performance may vary depending on preprocessing, input channels, training duration, and split configuration.
+* The notebook is Colab-first and may require path updates before local execution.
+
+## Future Work
+
+Possible extensions include:
+
+* adding a held-out test split.
+* training with additional augmentation strategies.
+* evaluating class-imbalance-aware losses.
+* adding model checkpoint loading for reproducible inference.
+* comparing additional segmentation architectures.
+* exporting a lightweight inference script.
+* adding local path configuration for direct command-line execution.
 
 ## References
 
-* Mete Ahishali, Anis Ur Rahman, Einari Heinaro, and Samuli Junttila, *ADA-Net: Attention-Guided Domain Adaptation Network with Contrastive Learning for Standing Dead Tree Segmentation Using Aerial Imagery*, arXiv:2504.04271, 2025.
-* Mete Ahishali, *Aerial Imagery for Dead Tree Segmentation*, Kaggle, 2025.
-* Olaf Ronneberger, Philipp Fischer, and Thomas Brox, *U-Net: Convolutional Networks for Biomedical Image Segmentation*, 2015.
-* Liang-Chieh Chen, Yukun Zhu, George Papandreou, Florian Schroff, and Hartwig Adam, *Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation*, 2018.
-* Rudra P. K. Poudel, Stephan Liwicki, and Roberto Cipolla, *Fast-SCNN: Fast Semantic Segmentation Network*, 2019.
-* scikit-learn documentation, LinearSVC.
-* PyTorch documentation, torchvision segmentation models.
+* Mete Ahishali. *Aerial Imagery for Dead Tree Segmentation*. Kaggle.
+  `https://www.kaggle.com/datasets/meteahishali/aerial-imagery-for-standing-dead-tree-segmentation`
 
-## License
+* Mete Ahishali, Anis Ur Rahman, Einari Heinaro, and Samuli Junttila. *ADA-Net: Attention-Guided Domain Adaptation Network with Contrastive Learning for Standing Dead Tree Segmentation Using Aerial Imagery*. arXiv:2504.04271, 2025.
 
-No open-source license is provided for this repository. The code and documentation are shared for reference only. Dataset and third-party materials remain subject to their original licenses and terms of use.
+## License and Reuse
+
+No open-source license is currently granted for this repository. The notebook, generated reports, visualisations, split files, and documentation are provided for reference only unless otherwise stated.
+
+The underlying dataset is provided by its original author through Kaggle. Users should follow the dataset provider's access terms and citation requirements.
+
+Raw images, masks, trained model files, full prediction outputs, and dataset archives are not redistributed in this repository.
