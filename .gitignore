@@ -2,7 +2,7 @@
 
 **pycache**/
 **/**pycache**/
-*.py[cod]
+*.py[codz]
 *$py.class
 
 # C extensions
@@ -30,6 +30,11 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# PyInstaller
+
+*.manifest
+*.spec
+
 # Installer logs
 
 pip-log.txt
@@ -54,6 +59,7 @@ coverage.xml
 
 .ipynb_checkpoints/
 **/.ipynb_checkpoints/
+*.ipynb_checkpoints/
 
 # IPython
 
@@ -71,6 +77,20 @@ ENV/
 env.bak/
 venv.bak/
 
+# Package managers and local environments
+
+Pipfile.lock
+poetry.lock
+poetry.toml
+pdm.lock
+pdm.toml
+.pdm-python
+.pdm-build/
+pixi.lock
+.pixi/
+uv.lock
+**pypackages**/
+
 # Type checkers and linters
 
 .mypy_cache/
@@ -80,6 +100,11 @@ dmypy.json
 .pytype/
 .ruff_cache/
 
+# Documentation builds
+
+docs/_build/
+/site/
+
 # IDE files
 
 .vscode/
@@ -88,20 +113,30 @@ dmypy.json
 .spyproject
 .ropeproject
 
-# System files
+# OS files
 
 .DS_Store
 Thumbs.db
 
-# Temporary files
+# Local editor files
 
 tempCodeRunnerFile.py
+*.swp
+*.swo
+
+# Logs
+
 *.log
 
 # Raw archives and datasets
 
 archive.zip
 *.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
 dataset/
 datasets/
 raw/
@@ -116,6 +151,8 @@ standing_dead_tree_segmentation_workspace/
 # Generated arrays and intermediate files
 
 combined_inputs/
+intermediate/
+cache/
 *.npy
 *.npz
 
@@ -124,20 +161,51 @@ combined_inputs/
 checkpoints/
 models/
 weights/
+saved_models/
 *.pt
 *.pth
 *.pkl
+*.pickle
+*.joblib
 *.ckpt
+*.h5
+*.onnx
 
 # Generated output folders
 
 outputs/
 predictions/
+full_prediction_masks/
 runs/
 wandb/
+mlruns/
+tensorboard/
+lightning_logs/
 
 # Local notebooks or scratch files
 
 scratch/
 tmp/
 temp/
+*_original.ipynb
+*_backup.ipynb
+*_clean.ipynb
+*_fixed.ipynb
+*_scratch.ipynb
+*_tmp.ipynb
+*_temp.ipynb
+*.nbconvert.ipynb
+
+# Colab and Google Drive local paths
+
+drive/
+content/
+sample_data/
+Colab Notebooks/
+
+# Temporary files
+
+*.tmp
+*.temp
+*.bak
+*.backup
