@@ -6,7 +6,7 @@ The project focuses on reproducible experimentation, model comparison, and visua
 
 ## Project Overview
 
-Standing dead trees are important indicators of forest health and can contribute to ecological risks such as wildfire spread. Aerial and multispectral imagery provide a scalable way to monitor forest conditions over large areas.
+Standing dead trees are important indicators of forest condition and can contribute to ecological risks such as wildfire spread. Aerial and multispectral imagery provide a scalable way to monitor forest areas without requiring manual field inspection at every location.
 
 This project compares several segmentation approaches:
 
@@ -54,11 +54,18 @@ The models are evaluated using common segmentation metrics, including Dice score
     │   ├── iou_comparison_across_models.png
     │   ├── train_loss_comparison_across_models.png
     │   └── val_loss_comparison_across_models.png
-    └── confusion_matrices/
-        ├── adanet_confusion_matrix.png
-        ├── deeplabv3_confusion_matrix.png
-        ├── fastscnn_confusion_matrix.png
-        └── unet_confusion_matrix.png
+    ├── confusion_matrices/
+    │   ├── adanet_confusion_matrix.png
+    │   ├── deeplabv3_confusion_matrix.png
+    │   ├── fastscnn_confusion_matrix.png
+    │   └── unet_confusion_matrix.png
+    └── examples/
+        ├── adanet_worst_example.png
+        ├── deeplabv3_worst_example.png
+        ├── fastscnn_worst_example.png
+        ├── svm_linear_svc_visualization_example.png
+        ├── svm_linear_svc_worst_example.png
+        └── unet_worst_example.png
 ```
 
 ## Dataset
@@ -72,7 +79,7 @@ Author: Mete Ahishali
 Source: Kaggle
 Associated paper: *ADA-Net: Attention-Guided Domain Adaptation Network with Contrastive Learning for Standing Dead Tree Segmentation Using Aerial Imagery*
 
-The dataset contains aerial forest imagery with RGB, near-infrared information, and manually annotated segmentation masks. The original dataset should be downloaded directly from Kaggle rather than redistributed through this repository.
+The dataset contains aerial forest imagery with RGB images, near-infrared false-colour imagery, and manually annotated segmentation masks. The original dataset should be downloaded directly from Kaggle rather than redistributed through this repository.
 
 After downloading and extracting the dataset, arrange the local files as:
 
@@ -85,6 +92,8 @@ data/
 ```
 
 The raw image files, masks, archives, model checkpoints, and generated intermediate arrays are intentionally excluded from version control.
+
+For more details about the expected local data layout, see `data/README.md`.
 
 ## Methods
 
@@ -106,7 +115,7 @@ A lightweight Fast-SCNN-style model is implemented to evaluate the trade-off bet
 
 ### ADA-Net-inspired Model
 
-The project also includes an ADA-Net-inspired lightweight model. This model is not a full reproduction of the original ADA-Net domain adaptation framework. Instead, it is included as an attention-inspired segmentation variant for comparison with the other models.
+The project also includes an ADA-Net-inspired lightweight model. This model is not a full reproduction of the original ADA-Net domain adaptation framework. Instead, it is included as an attention-inspired segmentation variant for comparison with the other implemented models.
 
 The original ADA-Net paper is cited as related work because it introduced an attention-guided domain adaptation framework for standing dead tree segmentation using aerial imagery.
 
@@ -142,9 +151,27 @@ The comparison chart summarises the main evaluation metrics across the implement
 
 ![Validation loss comparison](assets/training_curves/val_loss_comparison_across_models.png)
 
+## Qualitative Examples
+
+The following examples show representative prediction behaviour and failure cases. They are included to support visual inspection beyond aggregate metric values.
+
+### Linear SVM Example
+
+![Linear SVM visualisation example](assets/examples/svm_linear_svc_visualization_example.png)
+
+### Worst-case Examples
+
+| Model            | Example                                                                 |
+| ---------------- | ----------------------------------------------------------------------- |
+| Linear SVM       | ![SVM worst example](assets/examples/svm_linear_svc_worst_example.png)  |
+| UNet             | ![UNet worst example](assets/examples/unet_worst_example.png)           |
+| DeepLabV3        | ![DeepLabV3 worst example](assets/examples/deeplabv3_worst_example.png) |
+| Fast-SCNN-style  | ![Fast-SCNN worst example](assets/examples/fastscnn_worst_example.png)  |
+| ADA-Net-inspired | ![ADA-Net worst example](assets/examples/adanet_worst_example.png)      |
+
 ## Confusion Matrices
 
-The following confusion matrices provide a pixel-level view of model behaviour, including true background, predicted background, true tree pixels, and predicted tree pixels.
+The following confusion matrices provide a pixel-level view of model behaviour, including true background pixels, predicted background pixels, true tree pixels, and predicted tree pixels.
 
 ### UNet
 
@@ -167,6 +194,10 @@ The following confusion matrices provide a pixel-level view of model behaviour, 
 The repository includes fixed train and validation split files under `splits/` so that experiments can be repeated using the same data partition.
 
 The CSV files under `results/` store evaluation summaries and training histories for the compared models.
+
+This repository is organised as a Colab-first workflow. The notebook can be run in a Colab-style environment after the dataset is placed in the expected directory structure.
+
+For local execution, some path definitions may need to be adjusted because the original workflow was developed around a Colab-style workspace.
 
 ## Installation
 
@@ -191,18 +222,35 @@ Main dependencies include:
 
 ## How to Run
 
+### Colab-first workflow
+
 1. Download the dataset from Kaggle.
-2. Extract the dataset into the expected local data structure.
+2. Upload or mount the dataset in the expected directory structure.
 3. Install dependencies using `requirements.txt`.
 4. Open the notebook:
 
-```bash
-jupyter notebook Standing_Dead_Tree_Segmentation_from_Aerial_Imagery.ipynb
+```text
+Standing_Dead_Tree_Segmentation_from_Aerial_Imagery.ipynb
 ```
 
 5. Run the notebook sections in order.
 
 The notebook covers environment setup, data preparation, model training, evaluation, and result visualisation.
+
+### Local execution
+
+The notebook can also be adapted for local execution. To run it locally:
+
+1. Clone this repository.
+2. Install the required dependencies.
+3. Download the dataset from the original Kaggle source.
+4. Place the dataset under the expected `data/USA_segmentation/` structure.
+5. Adjust any Colab-specific path definitions if needed.
+6. Run the notebook in Jupyter.
+
+```bash
+jupyter notebook Standing_Dead_Tree_Segmentation_from_Aerial_Imagery.ipynb
+```
 
 ## Notes
 
@@ -214,9 +262,17 @@ Large generated files are intentionally excluded from this repository, including
 * Intermediate `.npy` arrays
 * Full prediction masks
 * Local experiment workspaces
-* Course materials or private project documents
+* Private documents or non-public source materials
 
 This keeps the repository focused on source code, reproducibility files, selected results, and documentation.
+
+## Limitations
+
+* The notebook is currently organised around a Colab-first workflow.
+* Local execution may require path adjustments.
+* Raw data and trained model checkpoints are not included.
+* The included visualisations and CSV files summarise selected experiment outputs rather than all generated intermediate files.
+* The ADA-Net-inspired model is a lightweight segmentation variant, not a full reproduction of the original ADA-Net domain adaptation framework.
 
 ## References
 
@@ -225,5 +281,9 @@ This keeps the repository focused on source code, reproducibility files, selecte
 * Olaf Ronneberger, Philipp Fischer, and Thomas Brox, *U-Net: Convolutional Networks for Biomedical Image Segmentation*, 2015.
 * Liang-Chieh Chen, Yukun Zhu, George Papandreou, Florian Schroff, and Hartwig Adam, *Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation*, 2018.
 * Rudra P. K. Poudel, Stephan Liwicki, and Roberto Cipolla, *Fast-SCNN: Fast Semantic Segmentation Network*, 2019.
-* scikit-learn documentation, *LinearSVC*.
-* PyTorch documentation, *torchvision segmentation models*.
+* scikit-learn documentation, LinearSVC.
+* PyTorch documentation, torchvision segmentation models.
+
+## License
+
+No open-source license is provided for this repository. The code and documentation are shared for reference only. Dataset and third-party materials remain subject to their original licenses and terms of use.
